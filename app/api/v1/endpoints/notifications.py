@@ -1,6 +1,7 @@
 import uuid
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi_cache.decorator import cache
 from app.services import NotificationService
 from app.core import db_helper as db
 from app.schemas import NotificationCreate, Notification, NotificationReadPaginated
@@ -9,12 +10,16 @@ router = APIRouter()
 
 
 @router.get("/notifications/", response_model=NotificationReadPaginated)
+@cache(expire=60)
 async def get_notifications(
     limit: int = Query(10, ge=1, le=100),
     offset: int = Query(0, ge=0),
+    category: str = Query(None, enum=["critical", "warning", "info"], description="Filter notifications by category"),
+    confidence: float = Query(None, ge=0, le=1),
+    processing_status: str = Query(None, enum=["pending", "processing", "completed", "failed"], description="Filter notifications by processing status"),
     session: AsyncSession = Depends(db.session_dependency),
 ) -> NotificationReadPaginated:
-    notifications, total = await NotificationService.get_notifications(session, limit, offset)
+    notifications, total = await NotificationService.get_notifications(session, limit, offset, category, confidence, processing_status)
     return {
         "total": total,
         "limit": limit,

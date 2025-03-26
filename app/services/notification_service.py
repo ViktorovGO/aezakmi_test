@@ -12,8 +12,11 @@ class NotificationService:
         session: AsyncSession,
         limit: int,
         offset: int,
+        category: str,
+        confidence: float, 
+        processing_status: str,
     ) -> tuple[list[Notification], int]:
-        return await NotificationRepository.get_all(session, limit, offset)
+        return await NotificationRepository.get_all(session, limit, offset, category, confidence, processing_status)
     
     @staticmethod
     async def get_notification(

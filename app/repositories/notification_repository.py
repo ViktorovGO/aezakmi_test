@@ -12,13 +12,28 @@ class NotificationRepository:
         session: AsyncSession,
         limit: int,
         offset: int,
+        category: str,
+        confidence: float, 
+        processing_status: str,
     ) -> tuple[list[Notification], int]:
         try:
             stmt = select(func.count()).select_from(Notification)
+            if category:
+                stmt = stmt.filter(Notification.category == category)
+            if confidence:
+                stmt = stmt.filter(Notification.confidence == confidence)
+            if processing_status:
+                stmt = stmt.filter(Notification.processing_status == processing_status)
             result = await session.execute(stmt)
             total = result.scalar()
 
             stmt = select(Notification).order_by(Notification.created_at.desc()).offset(offset).limit(limit)
+            if category:
+                stmt = stmt.filter(Notification.category == category)
+            if confidence:
+                stmt = stmt.filter(Notification.confidence == confidence)
+            if processing_status:
+                stmt = stmt.filter(Notification.processing_status == processing_status)
             result = await session.execute(stmt)
             notifications = result.scalars().all()
         except Exception as e:
