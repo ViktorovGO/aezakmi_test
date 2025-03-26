@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "app"
+version = "0.1.0"
+description = ""
+authors = ["Flash <btovt@rambler.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+fastapi = "^0.115.12"
+uvicorn = "^0.34.0"
+sqlalchemy = "^2.0.39"
+alembic = "^1.15.1"
+dotenv = "^0.9.9"
+pydantic-settings = "^2.8.1"
+psycopg2-binary = "^2.9.10"
+asyncpg = "^0.30.0"
+greenlet = "^3.1.1"
+
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.1.2"
+black = "^25.1.0"
+flake8-bugbear = "^24.12.12"
+flake8-black = "^0.3.6"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
