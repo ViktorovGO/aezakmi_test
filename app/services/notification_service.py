@@ -13,14 +13,23 @@ class NotificationService:
         limit: int,
         offset: int,
         category: str,
-        confidence: float, 
+        confidence_le: float,
+        confidence_ge: float,
         processing_status: str,
     ) -> tuple[list[Notification], int]:
-        return await NotificationRepository.get_all(session, limit, offset, category, confidence, processing_status)
-    
+        return await NotificationRepository.get_all(
+            session=session,
+            limit=limit,
+            offset=offset,
+            category=category,
+            confidence_le=confidence_le,
+            confidence_ge=confidence_ge,
+            processing_status=processing_status,
+        )
+
     @staticmethod
     async def get_notification(
-        session: AsyncSession, 
+        session: AsyncSession,
         notification_id: uuid.UUID,
     ) -> Notification:
         return await NotificationRepository.get(session, notification_id)
@@ -38,5 +47,6 @@ class NotificationService:
         notification: Notification,
     ) -> Notification:
         notification_data = NotificationUpdate(read_at=datetime.now())
-        return await NotificationRepository.update(session, notification, notification_data)
-        
+        return await NotificationRepository.update(
+            session, notification, notification_data
+        )

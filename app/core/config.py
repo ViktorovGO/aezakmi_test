@@ -11,7 +11,7 @@ class DbSettings(BaseSettings):
     DB_NAME: str = Field(json_schema_extra=({"env": "DB_NAME"}))
     DB_HOST: str = Field(json_schema_extra=({"env": "DB_HOST"}))
     DB_PORT: int = Field(json_schema_extra=({"env": "DB_PORT"}))
-    db_echo: bool = Field(True, validation_alias="DEBUG")
+    db_echo: bool = Field(False, validation_alias="DEBUG")
 
     @property
     def db_url(self) -> str:
@@ -32,10 +32,16 @@ class RedisConfig(BaseSettings):
     redis_url: str = f"redis://{host}"
 
 
+class CeleryConfig(BaseSettings):
+    broker_url: str = "redis://localhost:6379/0"
+    result_backend: str = "redis://localhost:6379/0"
+
+
 class Settings(BaseSettings):
     db: DbSettings = DbSettings()
     run: Run = Run()
     redis: RedisConfig = RedisConfig()
+    celery: CeleryConfig = CeleryConfig()
 
     model_config = ConfigDict(env_file="../../.env")
 

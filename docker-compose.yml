@@ -2,7 +2,8 @@ services:
   api:
     build: .
     entrypoint: ["sh", "-c", "poetry run alembic upgrade head && poetry run python ./app/main.py"]
-    restart: always
+    container_name: fastapi_container
+    restart: unless-stopped
     ports:
       - "${APP_PORT}:8000"
     environment:
@@ -15,10 +16,9 @@ services:
     depends_on:
       - db
       - redis
-    
   db:
     image: postgres
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -27,23 +27,29 @@ services:
       - "${DB_PORT}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-  pgadmin:
-    image: dpage/pgadmin4
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: test@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: 123
-    ports:
-      - "82:80"
-    depends_on:
-      - db
   redis:
     image: redis
-    restart: always
+    restart: unless-stopped
     ports:
       - "6379:6379"
     volumes:
       - redisdata:/data
+  worker:
+    build: .
+    command: poetry run celery -A app.celery_worker.app worker --loglevel=info
+    container_name: celery_worker
+    restart: unless-stopped
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=db
+      - DB_PORT=${DB_PORT}
+      - DEBUG=${DEBUG:-False}
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - redis
 
 volumes:
   pgdata:

@@ -32,13 +32,16 @@ class NotificationUpdate(NotificationBase):
     read_at: datetime | None = None
     category: str | None = None
     confidence: float | None = None
-    processing_status: Annotated[
-        str, Field(enum=["pending", "processing", "completed", "failed"])
-    ] | None 
+    processing_status: (
+        Annotated[str, Field(enum=["pending", "processing", "completed", "failed"])]
+        | None
+    )
+
 
 class Notification(NotificationRead):
     id: uuid.UUID
     model_config = ConfigDict(from_attributes=True)
+
 
 class NotificationReadPaginated(BaseModel):
     total: int
