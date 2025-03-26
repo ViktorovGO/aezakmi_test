@@ -2,16 +2,18 @@ import pytest
 import asyncio
 import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
-from app import app
+from app.main import app
 from app.core import settings
+from app.core import db_helper as db
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from redis import asyncio as aioredis
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
 @pytest_asyncio.fixture()
 async def client() -> AsyncClient:
-    return AsyncClient(transport=ASGITransport(app=app), base_url="http://testserver")
+    return AsyncClient(transport=ASGITransport(app=app), base_url="https://testserver")
 
 
 @pytest.fixture(autouse=True)
