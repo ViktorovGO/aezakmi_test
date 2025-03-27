@@ -32,9 +32,9 @@
     docker-compose up -d
     ```
 ## Тесты
-    ```
-    docker exec -it fastapi_container poetry run pytest
-    ```
+```bash
+docker exec -it fastapi_container poetry run pytest
+```
 
 ## Использование
 
