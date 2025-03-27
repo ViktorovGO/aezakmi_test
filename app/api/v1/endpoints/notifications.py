@@ -11,7 +11,7 @@ router = APIRouter()
 
 
 @router.get("/notifications/", response_model=NotificationReadPaginated)
-@cache(expire=60)
+@cache(expire=10)
 async def get_notifications(
     limit: int = Query(10, ge=1, le=100),
     offset: int = Query(0, ge=0),
