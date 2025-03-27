@@ -50,3 +50,10 @@ class NotificationService:
         return await NotificationRepository.update(
             session, notification, notification_data
         )
+
+    @staticmethod
+    async def delete_notification(
+        session: AsyncSession,
+        notification: Notification,
+    ) -> Notification:
+        return await NotificationRepository.delete(session, notification)

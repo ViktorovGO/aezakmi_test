@@ -1,7 +1,9 @@
 import pytest
 import asyncio
 import pytest_asyncio
+from unittest.mock import patch
 from httpx import AsyncClient, ASGITransport
+from app.celery_worker import analyze
 from app.main import app
 from app.core import settings
 from app.core import db_helper as db

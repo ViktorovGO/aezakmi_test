@@ -33,8 +33,8 @@ class RedisConfig(BaseSettings):
 
 
 class CeleryConfig(BaseSettings):
-    broker_url: str = "redis://localhost:6379/0"
-    result_backend: str = "redis://localhost:6379/0"
+    broker_url: str = "redis://redis:6379/0"
+    result_backend: str = "redis://redis:6379/0"
 
 
 class Settings(BaseSettings):

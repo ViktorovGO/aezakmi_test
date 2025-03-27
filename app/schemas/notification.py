@@ -35,7 +35,7 @@ class NotificationUpdate(NotificationBase):
     processing_status: (
         Annotated[str, Field(enum=["pending", "processing", "completed", "failed"])]
         | None
-    )
+    ) = None
 
 
 class Notification(NotificationRead):

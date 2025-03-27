@@ -91,3 +91,16 @@ class NotificationRepository:
             raise HTTPException(status_code=400, detail="Failed to update notification")
         else:
             return notification
+
+    @staticmethod
+    async def delete(
+        session: AsyncSession,
+        notification: Notification,
+    ) -> None:
+        try:
+            await session.delete(notification)
+            await session.commit()
+        except Exception as e:
+            raise HTTPException(status_code=400, detail="Failed to delete notification")
+
+        return "Notification deleted"

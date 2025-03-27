@@ -76,9 +76,20 @@ async def mark_as_read(
 
 
 @router.get("/notifications/check/{notification_id}")
-async def get_notification(
+async def get_notification_status(
+    notification_id: uuid.UUID,
+    session: AsyncSession = Depends(db.session_dependency),
+) -> dict:
+    notification = await NotificationService.get_notification(session, notification_id)
+    return {
+    "processing_status":notification.processing_status,
+    }
+
+
+@router.delete("/notifications/{notification_id}")
+async def delete_notification(
     notification_id: uuid.UUID,
     session: AsyncSession = Depends(db.session_dependency),
 ) -> str:
     notification = await NotificationService.get_notification(session, notification_id)
-    return notification.processing_status
+    return await NotificationService.delete_notification(session, notification)
