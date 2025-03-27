@@ -17,8 +17,8 @@ async def test_ai_categorization(client: AsyncClient):
     data = response.json()
     assert data["processing_status"] == "pending"
     check_data = {"processing_status": "pending"}
- 
-    timeout = 10  
+
+    timeout = 10
     interval = 0.5  # интервал между проверками
     elapsed_time = 0
     while elapsed_time < timeout:

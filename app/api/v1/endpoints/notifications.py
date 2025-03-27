@@ -82,7 +82,7 @@ async def get_notification_status(
 ) -> dict:
     notification = await NotificationService.get_notification(session, notification_id)
     return {
-    "processing_status":notification.processing_status,
+        "processing_status": notification.processing_status,
     }
 
 
